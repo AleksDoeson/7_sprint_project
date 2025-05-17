@@ -1,30 +1,27 @@
 package model;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+
 import java.util.List;
 
-public class Order {
-    private String firstName;
-    private String lastName;
-    private String address;
-    private String metroStation;
-    private String phone;
-    private int rentTime;
-    private String deliveryDate;
-    private String comment;
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class OrderCreateRequest {
+    private String firstName = "Алекс";
+    private String lastName = "Воропай";
+    private String address = "Краснодар, ул. Ленина, д.5, кв.75";
+    private int metroStation = 1;
+    private String phone = "8 900 000 11 11";
+    private String rentTime = "1";
+    private String deliveryDate = "2026-01-01";
+    private String comment = "Пожалуйста, доставьте чистый самокат";
     private List<String> color;
-
-    public Order(String firstName, String lastName, String address, String metroStation,
-                 String phone, int rentTime, String deliveryDate, String comment, List<String> color) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.address = address;
-        this.metroStation = metroStation;
-        this.phone = phone;
-        this.rentTime = rentTime;
-        this.deliveryDate = deliveryDate;
-        this.comment = comment;
-        this.color = color;
-    }
 }
+
 
 

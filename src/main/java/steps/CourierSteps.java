@@ -1,16 +1,18 @@
 package steps;
 
+import constants.ApiEndpoint;
 import io.qameta.allure.Step;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import io.restassured.response.ValidatableResponse;
 import io.restassured.specification.RequestSpecification;
-import org.example.constants.ApiEndpoint;
-import org.example.pojo.CourierCreateRequest;
-import org.example.pojo.CourierLoginRequest;
-import org.example.pojo.CourierLoginResponse;
+import model.CourierCreateRequest;
+import model.CourierLoginRequest;
+import model.CourierLoginResponse;
+
+
+import static constants.ApiEndpoint.*;
 import static io.restassured.RestAssured.given;
-import static org.example.constants.ApiEndpoint.*;
 public class CourierSteps {
     public static RequestSpecification requestSpecification() {
         return given().log().all()

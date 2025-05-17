@@ -1,27 +1,25 @@
 package steps;
 
+import constants.ApiEndpoint;
 import io.qameta.allure.Step;
+import io.restassured.http.ContentType;
 import io.restassured.response.ValidatableResponse;
-import model.Order;
+import io.restassured.specification.RequestSpecification;
+import model.OrderCreateRequest;
 
+import static constants.ApiEndpoint.ORDER_POST_CREATE;
 import static io.restassured.RestAssured.given;
-
-public class OrderClient {
-    private static final String BASE_URI = "https://qa-scooter.praktikum-services.ru";
-
-    @Step("Создание заказа")
-    public ValidatableResponse create(Order order) {
-        return given().baseUri(BASE_URI)
-                .header("Content-type", "application/json")
-                .body(order)
-                .when().post("/api/v1/orders")
-                .then();
+public class OrderSteps {
+    public static RequestSpecification requestSpecification() {
+        return given().log().all()
+                .contentType(ContentType.JSON)
+                .baseUri(ApiEndpoint.BASE_URL);
     }
-
-    @Step("Получение списка заказов")
-    public ValidatableResponse getOrders() {
-        return given().baseUri(BASE_URI)
-                .when().get("/api/v1/orders")
+    @Step("Создание нового заказа")
+    public ValidatableResponse orderCreate(OrderCreateRequest orderCreateRequest) {
+        return requestSpecification()
+                .body(orderCreateRequest)
+                .post(ORDER_POST_CREATE)
                 .then();
     }
 }

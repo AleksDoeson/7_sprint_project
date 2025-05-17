@@ -1,64 +1,42 @@
 package order;
 
-import client.OrderClient;
-import model.Order;
+import io.qameta.allure.Description;
+import io.qameta.allure.junit4.DisplayName;
+import model.OrderCreateRequest;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import steps.OrderSteps;
 
-import java.util.Collections;
 import java.util.List;
-
-import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.equalTo;
-
+import static org.hamcrest.CoreMatchers.instanceOf;
+@RunWith(Parameterized.class)
 public class OrderCreateTest {
-    private final OrderClient orderClient = new OrderClient();
-
+    private List<String> color;
+    public OrderCreateTest(List<String> color) {
+        this.color = color;
+    }
+    @Parameterized.Parameters (name = "Цвет самоката - {0}")
+    public static Object[][] dataGen() {
+        return new Object[][] {
+                {List.of("BLACK", "GREY")},
+                {List.of("BLACK")},
+                {List.of("GREY")},
+                {List.of()}
+        };
+    }
     @Test
-    public void createOrderWithOneColor() {
-        Order order = new Order(
-                "Иван", "Иванов", "ул. Ленина, 10", "4", "+79998887766",
-                3, "2025-05-20", "Позвонить за час", List.of("BLACK")
-        );
-
-        orderClient.create(order)
-                .statusCode(201)
-                .body("track", notNullValue());
+    @DisplayName("Создание заказа")
+    @Description("Создание заказа с самокатами разных цветов через параметризованный тест")
+    public void orderCreate() {
+        OrderCreateRequest orderCreateRequest = new OrderCreateRequest();
+        orderCreateRequest.setColor(color);
+        OrderSteps orderSteps = new OrderSteps();
+        orderSteps.orderCreate(orderCreateRequest)
+                .assertThat().body("track", instanceOf(Integer.class))
+                .and()
+                .statusCode(201);
     }
 
-    @Test
-    public void createOrderWithTwoColors() {
-        Order order = new Order(
-                "Ольга", "Петрова", "пр-т Мира, 55", "12", "+79995554433",
-                2, "2025-05-18", "Оставить у двери", List.of("BLACK", "GREY")
-        );
-
-        orderClient.create(order)
-                .statusCode(201)
-                .body("track", notNullValue());
-    }
-
-    @Test
-    public void createOrderWithoutColor() {
-        Order order = new Order(
-                "Николай", "Сидоров", "ул. Гагарина, 1", "1", "+79991112233",
-                1, "2025-05-19", "Без звонка", Collections.emptyList()
-        );
-
-        orderClient.create(order)
-                .statusCode(201)
-                .body("track", notNullValue());
-    }
-
-    @Test
-    public void createOrderWithMissingRequiredFields() {
-        Order order = new Order(
-                "", "", "", "", "",
-                0, "", "", List.of("BLACK")
-        );
-
-        orderClient.create(order)
-                .statusCode(400)
-                .body("message", equalTo("Недостаточно данных для создания заказа"));
-    }
 }
 

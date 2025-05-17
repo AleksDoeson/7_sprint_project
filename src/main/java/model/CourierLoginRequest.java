@@ -1,20 +1,18 @@
 package model;
 
-public class CourierLogin {
-    private final String login;
-    private final String password;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 
-    public CourierLogin(String login, String password) {
-        this.login = login;
-        this.password = password;
-    }
-
-    public String getLogin() {
-        return login;
-    }
-    public String getPassword() {
-        return password;
-    }
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class CourierLoginRequest {
+    private String login;
+    private String password;
 }
+
 
 
